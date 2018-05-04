@@ -22,6 +22,9 @@ private:
 	ATank* GetControlledAITank() const;
 public:
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 
 	virtual void BeginPlay() override;
 	

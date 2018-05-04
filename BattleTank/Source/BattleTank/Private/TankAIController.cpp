@@ -8,6 +8,8 @@ ATank * ATankAIController::GetControlledAITank() const
 	return Cast<ATank>(GetPawn());
 }
 
+
+
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
@@ -20,6 +22,18 @@ void ATankAIController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("The player tank is: %s"), *(PlayerTank->GetName()))
 	}
+}
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetPlayerTank()) 
+
+	{
+		GetControlledAITank()->AimAt(GetPlayerTank()->GetActorLocation());
+	}
+
 }
 ATank * ATankAIController::GetPlayerTank() const
 {
