@@ -18,7 +18,7 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 public:
 
 
-
+private:
 	//When the game begins
 	virtual void BeginPlay() override;
 
@@ -31,8 +31,23 @@ public:
 	//where the crosshair intersects the world
 
 	void AimTowardsCrossHair();
+
+	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
+
+	UPROPERTY(EditAnywhere)
+	float CrossHairXLocation = 0.5f;
+
+	UPROPERTY(EditAnywhere)
+	float CrossHairYLocation = 0.3333f;
 	
+	FVector2D ScreenLocation;
+
+	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const;
+
+	UPROPERTY(EditAnywhere)
+	float LineTraceRange = 1000000.f;
 	
+	bool GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const;
 	
 	
 };
