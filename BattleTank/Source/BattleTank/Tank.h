@@ -19,6 +19,9 @@ public:
 
 	void AimAt(FVector OutHitLocation);
 
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
+
 protected:
 
 	// Called when the game starts or when spawned
@@ -36,6 +39,8 @@ private:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UPROPERTY(EditAnywhere, Category = Firing)
+		float LaunchSpeed = 100000; //Defaulft value 1000 m/s can be changed
 	
 	
 };
