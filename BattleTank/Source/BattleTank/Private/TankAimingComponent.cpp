@@ -1,7 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Components/StaticMeshComponent.h"
 #include "TankAimingComponent.h"
+#include "TankBarrel.h"
+#include"Kismet/GameplayStatics.h"
+#include "Components/StaticMeshComponent.h"
+
 
 
 // Sets default values for this component's properties
@@ -14,36 +17,54 @@ UTankAimingComponent::UTankAimingComponent()
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
 
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
 
 void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
 {
-	if (Barrel != nullptr)
-	{
-	
-		UE_LOG(LogTemp, Warning, TEXT("Firing at %f"), LaunchSpeed)
-	}
+	if (!Barrel) { return; }
+
+	FVector OutLauchVelocity;
+	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+
+	if (UGameplayStatics::SuggestProjectileVelocity
+			(
+		this,
+		OutLauchVelocity,
+		StartLocation,
+		OutHitLocation,
+		LaunchSpeed,
+		false,
+		0.0f,
+		0.0f,
+		ESuggestProjVelocityTraceOption::DoNotTrace
+			)
+		)
+
+		{
+			auto AimDirection = OutLauchVelocity.GetSafeNormal();
+			UE_LOG(LogTemp, Warning, TEXT("Aiming at %s"),*AimDirection.ToString());
+			MoveBarrelTowards(AimDirection);
+
+		}
+		//If no solution found do nothing
+		
 }
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+	
+	// Work-out the difference between the current barrel rotation and the aim direction
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimDirection.Rotation();
+	auto DeltaRotator = BarrelRotator - AimAsRotator;
+	Barrel->Elevate(5, 40, 0);
+}
+
+	
+	
 
