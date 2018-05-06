@@ -2,6 +2,7 @@
 
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "Engine/World.h"
 #include"Kismet/GameplayStatics.h"
 #include "Components/StaticMeshComponent.h"
 
@@ -49,9 +50,15 @@ void UTankAimingComponent::AimAt(FVector OutHitLocation, float LaunchSpeed)
 			auto AimDirection = OutLauchVelocity.GetSafeNormal();
 			UE_LOG(LogTemp, Warning, TEXT("Aiming at %s"),*AimDirection.ToString());
 			MoveBarrelTowards(AimDirection);
+			auto Time = GetWorld()->GetTimeSeconds();
+			UE_LOG(LogTemp, Warning, TEXT("%f : Elevate is working"), Time)
 
 		}
-		//If no solution found do nothing
+	else
+	{
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f : no solution found"), Time)
+	}
 		
 }
 
@@ -62,7 +69,7 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = BarrelRotator - AimAsRotator;
-	Barrel->Elevate(5, 40, 0);
+	Barrel->Elevate(DeltaRotator.Pitch);
 }
 
 	
