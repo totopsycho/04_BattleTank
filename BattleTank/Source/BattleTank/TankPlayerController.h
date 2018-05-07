@@ -11,6 +11,7 @@
  * 
  */
 class ATank;
+
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
 {

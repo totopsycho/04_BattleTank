@@ -1,8 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
+#include "TankBarrel.h"
 #include "Engine/World.h"
 #include "Math/UnrealMathUtility.h"
-#include "TankBarrel.h"
+
 
 
 void UTankBarrel::Elevate(float RelativeSpeed)
@@ -15,8 +16,6 @@ void UTankBarrel::Elevate(float RelativeSpeed)
 	auto Elevation = FMath::Clamp(RawNewElevation, MinElevationDegrees, MaxElevationDegrees);
 	SetRelativeRotation(FRotator(Elevation, 0, 0));
 	
-	
-
 }
 
 
